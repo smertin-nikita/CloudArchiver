@@ -9,35 +9,34 @@ class YaUploader:
     def __init__(self, token: str):
         self.token = token
 
-    def upload(self, file_path=None, file_url=None):
+    def upload_by_url(self, file_url):
+        try:
+            response = requests.post(
+                url='https://cloud-api.yandex.net/v1/disk/resources/upload',
+                params={
+                    'path': op.join(os.getcwd(), 'photos/'),
+                    'url': file_url,
+                    'overwrite': 'true'},
+                headers={'Authorization': 'OAuth ' + self.token}
+            )
+            response.raise_for_status()
+            return True
+        except requests.RequestException as e:
+            print(e.response.status_code)
+            return False
+
+    def upload_from_path(self, file_path):
         """Метод загруджает файл file_path на яндекс диск"""
 
-        if file_path:
-            try:
-                response = requests.get(
-                    url='https://cloud-api.yandex.net/v1/disk/resources/upload',
-                    params={'path': op.basename(file_path), 'overwrite': 'true'},
-                    headers={'Authorization': 'OAuth ' + self.token}
-                )
-                response.raise_for_status()
-            except requests.RequestException as e:
-                print(e.response.status_code)
-                return False
-        elif file_url:
-            try:
-                response = requests.post(
-                    url='https://cloud-api.yandex.net/v1/disk/resources/upload',
-                    params={
-                        'path': op.join(os.getcwd(), 'photos/'),
-                        'url': file_url,
-                        'overwrite': 'true'},
-                    headers={'Authorization': 'OAuth ' + self.token}
-                )
-                response.raise_for_status()
-            except requests.RequestException as e:
-                print(e.response.status_code)
-                return False
-        else:
+        try:
+            response = requests.get(
+                url='https://cloud-api.yandex.net/v1/disk/resources/upload',
+                params={'path': op.basename(file_path), 'overwrite': 'true'},
+                headers={'Authorization': 'OAuth ' + self.token}
+            )
+            response.raise_for_status()
+        except requests.RequestException as e:
+            print(e.response.status_code)
             return False
 
         data = response.json()
