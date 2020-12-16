@@ -6,9 +6,6 @@ import requests
 from time import sleep
 
 
-
-
-
 class VkUser:
     """Represents entity vk user"""
 
