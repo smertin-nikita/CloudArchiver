@@ -9,12 +9,12 @@ class YaUploader:
     def __init__(self, token: str):
         self.token = token
 
-    def upload_by_url(self, file_url):
+    def upload_by_url(self, file_url, path='download'):
         try:
             response = requests.post(
                 url='https://cloud-api.yandex.net/v1/disk/resources/upload',
                 params={
-                    'path': op.join(os.getcwd(), 'photos/'),
+                    'path': path,
                     'url': file_url,
                     'overwrite': 'true'},
                 headers={'Authorization': 'OAuth ' + self.token}
