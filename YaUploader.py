@@ -9,6 +9,9 @@ class YaUploader:
     def __init__(self, token: str):
         self.token = token
 
+    def create_folder(self, name):
+        pass
+
     def upload_by_url(self, file_url, path='download'):
         try:
             response = requests.post(
@@ -22,6 +25,8 @@ class YaUploader:
             response.raise_for_status()
             return True
         except requests.RequestException as e:
+            if e.response.status_code == 409:
+                self.create_folder('VkPhotos')
             print(e.response.status_code)
             return False
 

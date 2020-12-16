@@ -23,8 +23,8 @@ def get_url_for_token():
 
 user = VkUser(token=CONFIG['vk']['token'])
 photos = user.get_photos()
-photos = map(VkPhoto.get_by_size, photos)
 uploader = YaUploader(token=CONFIG['yandex']['token'])
 for photo in photos:
-    if photo:
-        uploader.upload(photo['url'])
+    photo_size = photo.get_by_size()
+    if photo_size:
+        uploader.upload_by_url(photo_size['url'], f"VkPhotos/{photo.likes['count']}")
