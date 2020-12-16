@@ -79,7 +79,7 @@ class VkUser:
 
             return friends
 
-    def get_photos(self, likes=None, album_id='profile'):
+    def get_photos(self, likes=0, album_id='profile'):
         """Return photos by number of likes"""
 
         params = {
@@ -101,8 +101,20 @@ class VkUser:
             raise Exception(info['error'])
 
         photos = info['response']['items']
-        if likes:
-            most_likes = [photo for photo in photos if photo['likes']['count'] >= likes]
-            return most_likes
-        else:
-            return photos
+
+        photos_most_liked = [
+            VkPhoto(photo['id'], photo['date'], photo['likes'], photo['sizes'])
+            for photo in photos if photo['likes']['count'] >= likes
+        ]
+        return photos_most_liked
+
+
+class VkPhoto:
+    def __init__(self, id, date, likes, sizes):
+        self.id = id
+        self.data = date
+        self.likes = likes
+        self.sizes = sizes
+
+    def get_by_size(self, type='s'):
+        return [photo for photo in self.sizes if photo[type] == type][0]
