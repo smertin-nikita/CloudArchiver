@@ -2,7 +2,7 @@ from pprint import pprint
 
 import requests
 
-from VkRequester import VkUser
+from VkRequester import VkUser, VkPhoto
 from YaUploader import YaUploader
 from config import CONFIG
 
@@ -23,5 +23,7 @@ def get_url_for_token():
 
 user = VkUser(token=CONFIG['vk']['token'])
 photos = user.get_photos()
-pprint(photos)
+photos = map(VkPhoto.get_by_size, photos)
 uploader = YaUploader(token=CONFIG['yandex']['token'])
+for photo in photos:
+    uploader.upload(photo['url'])

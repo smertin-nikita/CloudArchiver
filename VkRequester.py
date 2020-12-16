@@ -116,5 +116,5 @@ class VkPhoto:
         self.likes = likes
         self.sizes = sizes
 
-    def get_by_size(self, type='s'):
-        return [photo for photo in self.sizes if photo[type] == type][0]
+    def get_by_size(self, type='z'):
+        return [photo for photo in self.sizes if photo['type'] == type]
