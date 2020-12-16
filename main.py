@@ -26,4 +26,5 @@ photos = user.get_photos()
 photos = map(VkPhoto.get_by_size, photos)
 uploader = YaUploader(token=CONFIG['yandex']['token'])
 for photo in photos:
-    uploader.upload(photo['url'])
+    if photo:
+        uploader.upload(photo['url'])
