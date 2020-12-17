@@ -9,12 +9,13 @@ class YaUploader:
     def __init__(self, token: str):
         self.token = token
 
+    # todo check directory path
     def create_folder(self, folder_name):
         try:
             response = requests.put(
                 url='https://cloud-api.yandex.net/v1/disk/resources',
                 params={
-                    'path': folder_name,
+                    'path': folder_name.strip('/'),
                     'overwrite': 'true'
                 },
                 headers={'Authorization': 'OAuth ' + self.token}
@@ -26,6 +27,7 @@ class YaUploader:
 
         return True
 
+    # todo фотографии дублируются
     def upload_by_url(self, file_url, file_name, path='download'):
         # todo Если path уже существует - не делать запрос
         self.create_folder(path)
@@ -34,7 +36,7 @@ class YaUploader:
             response = requests.post(
                 url='https://cloud-api.yandex.net/v1/disk/resources/upload',
                 params={
-                    'path': path + '/' + file_name,
+                    'path': path.strip('/') + '/' + file_name.strip('/'),
                     'url': file_url,
                     'overwrite': 'true'
                 },
