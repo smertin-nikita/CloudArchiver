@@ -69,6 +69,7 @@ class VkUser:
                 url=friends_url,
                 params={**self.params, **friends_params}
             )
+            # todo Писать ошибки в логи или оставить так
             response.raise_for_status()
             info: dict = response.json()
             if 'error' in info.keys():
