@@ -1,0 +1,32 @@
+import os
+from flask import Flask, request
+
+from api.config import config
+
+def create_app(test_config=None):
+    app = Flask(__name__)
+
+    # check environment variables to see which config to load
+    env = os.environ.get("FLASK_ENV", "dev")
+    # for configuration options, look at api/config.py
+    if test_config:
+        # purposely done so we can inject test configurations
+        # this may be used as well if you'd like to pass
+        # in a separate configuration although I would recommend
+        # adding/changing it in api/config.py instead
+        # ignore environment variable config if config was given
+        app.config.from_mapping(**test_config)
+    else:
+        app.config.from_object(config[env])  # config dict is from api/config.py
+
+
+    # import and register blueprints
+    from api.views import main
+
+    # why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
+    app.register_blueprint(main.main)
+
+    # register error Handler
+    app.register_error_handler(Exception, all_exception_handler)
+
+    return app
