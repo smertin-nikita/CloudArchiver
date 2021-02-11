@@ -2,6 +2,7 @@ import os
 from flask import Flask, request
 
 from api.config import config
+import botArchiver
 
 
 def create_app(test_config=None):
@@ -19,5 +20,12 @@ def create_app(test_config=None):
         app.config.from_mapping(**test_config)
     else:
         app.config.from_object(config[env])  # config dict is from api/config.py
+
+    @app.route('/')
+    def receive_update():
+        def webhook():
+            botArchiver.bot.remove_webhook()
+            botArchiver.bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
+            return "!", 200
 
     return app
