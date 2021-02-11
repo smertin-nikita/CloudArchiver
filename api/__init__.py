@@ -3,6 +3,7 @@ from flask import Flask, request
 
 from api.config import config
 
+
 def create_app(test_config=None):
     app = Flask(__name__)
 
@@ -18,15 +19,5 @@ def create_app(test_config=None):
         app.config.from_mapping(**test_config)
     else:
         app.config.from_object(config[env])  # config dict is from api/config.py
-
-
-    # import and register blueprints
-    from api.views import main
-
-    # why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
-    app.register_blueprint(main.main)
-
-    # register error Handler
-    app.register_error_handler(Exception, all_exception_handler)
 
     return app

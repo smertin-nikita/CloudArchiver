@@ -139,4 +139,3 @@ cython_debug/
 
 # PyCharm
 .idea
-config.py
