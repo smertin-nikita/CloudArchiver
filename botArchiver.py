@@ -1,7 +1,6 @@
 import config
 import telebot
 from telebot import types
-from VkRequester import VkUser
 
 bot = telebot.TeleBot(config.telegram_token, parse_mode=None)
 
@@ -17,16 +16,6 @@ def generate_markup():
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     bot.reply_to(message, "Ваш id или screen name в Вконтакте?")
-
-
-@bot.message_handler(commands=['vk'])
-def vk_auth(message):
-    command = message.text.split(maxsplit=1)
-    if len(command) < 1:
-        check_answer(message)
-    else:
-        uid = command[1].rsplit()
-        vk_user = VkUser(uid)
 
 
 @bot.message_handler(content_types=['text'])
