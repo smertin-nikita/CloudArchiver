@@ -1,8 +1,11 @@
 import os
+
 from flask import Flask, request
 
 from api.config import config
 import botArchiver
+
+TOKEN = '1485309370:AAGDyUqhNM4Ev02sD6CW-ljMnjv3WlUXFiY'
 
 
 def create_app(test_config=None):
@@ -21,11 +24,15 @@ def create_app(test_config=None):
     else:
         app.config.from_object(config[env])  # config dict is from api/config.py
 
-    @app.route('/')
-    def receive_update():
-        def webhook():
-            botArchiver.bot.remove_webhook()
-            botArchiver.bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
-            return "!", 200
+    @app.route('/' + TOKEN, methods=['POST'])
+    def getMessage():
+        botArchiver.bot.process_new_updates([botArchiver.telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+        return "!", 200
+
+    @app.route("/")
+    def webhook():
+        botArchiver.bot.remove_webhook()
+        botArchiver.bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
+        return "!", 200
 
     return app
