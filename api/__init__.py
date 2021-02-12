@@ -5,7 +5,7 @@ from flask import Flask, request
 from api.config import config
 import botArchiver
 
-TOKEN = '1485309370:AAGDyUqhNM4Ev02sD6CW-ljMnjv3WlUXFiY'
+TOKEN = ''
 
 
 def create_app(test_config=None):
@@ -32,7 +32,7 @@ def create_app(test_config=None):
     @app.route("/")
     def webhook():
         botArchiver.bot.remove_webhook()
-        botArchiver.bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
+        botArchiver.bot.set_webhook(url='https://warm-citadel-06979.herokuapp.com/' + TOKEN)
         return "!", 200
 
     return app
