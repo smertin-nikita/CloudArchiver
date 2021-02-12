@@ -1,8 +1,8 @@
-import config
+import config_token
 import telebot
 from telebot import types
 
-bot = telebot.TeleBot(config.telegram_token, parse_mode=None)
+bot = telebot.TeleBot(config_token.telegram_token, parse_mode=None)
 
 
 def generate_markup():
